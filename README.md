@@ -22,6 +22,6 @@
 
 <b>Convenção de commits utilizada no projeto:</b> Conventional Commits 1.0.0-beta.4<br>
 <b>Disponível em:</b> https://www.conventionalcommits.org/pt-br/v1.0.0-beta.4/ <br>
-<b>Data de acesso:</b> 4/10/2021
+<b>Data de acesso:</b> 13/10/2021
   
   
