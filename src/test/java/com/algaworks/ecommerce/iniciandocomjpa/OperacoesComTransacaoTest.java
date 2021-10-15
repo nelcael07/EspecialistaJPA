@@ -12,22 +12,15 @@ public class OperacoesComTransacaoTest extends EntityManagerTest{
 	public void inserirObject () {
 		Produto produto = new Produto();
 		
-		produto.setId(2);
+		produto.setId(4);
 		produto.setNome("camera canon");
 		produto.setDescricao("A melhor descrição");
 		produto.setPreco(new BigDecimal(70));
 		
 		entityManager.getTransaction().begin();
-		//não necessariamente precisa estar dentro do begin e commit, pq quando chegar na linha do persist 
-		//ele vai identificar que precisa de uma transasão e vai esperar ela ser aberta para execultar tal linha
-		//mas é aconselhavel que seja colocado no meio da transação para seguir um padrão.		
 		entityManager.persist(produto);
-		//flush força o entitymanager jogar todos os dados da memoria para o banco de dados (Mesmo assim é necessario uma transação). Dentro do commit é implementado o flush.		
-//		entityManager.flush();		
-		
 		entityManager.getTransaction().commit();
 		
-		//limpando memoria do entityManager;		
 		entityManager.clear();
 		
 		Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
@@ -39,11 +32,44 @@ public class OperacoesComTransacaoTest extends EntityManagerTest{
 		Produto produto = new Produto();
 		entityManager.getTransaction().begin();
 		
-//		entityManager.persist(produto);
-//		entityManager.merge(produto);
-//		entityManager.remove(produto);
-		
 		entityManager.getTransaction().commit();
 	}
+	
+	@Test
+	public void removerElemento() {
+		//mandando ele buscar o produto 3 para exclui-lo		
+		Produto produto = entityManager.find(Produto.class, 3);
+		
+		entityManager.getTransaction().begin();
+		entityManager.remove(produto);
+		entityManager.getTransaction().commit();
+		
+		Produto produtoVerificacao = entityManager.find(Produto.class, 3);
+		Assert.assertNull(produtoVerificacao);
+	}
+	
+	@Test
+	public void atualizarObjeto() {
+		Produto produto = entityManager.find(Produto.class, 1);
+		
+		produto.setNome("livro teste atualização");
+		produto.setPreco(new BigDecimal(3));
+		produto.setDescricao("muito bom");
+		
+		entityManager.getTransaction().begin();
+		entityManager.merge(produto);
+		entityManager.getTransaction().commit();
+		
+		entityManager.clear();
+		
+		Produto produtoVerificado = entityManager.find(Produto.class, produto.getId() );
+		Assert.assertNotNull(produtoVerificado);
+		
+		
+	}
+	
+	
+	
+	
 	
 }
